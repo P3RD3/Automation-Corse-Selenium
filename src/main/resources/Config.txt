@@ -1,0 +1,10 @@
+wait:5
+
+Users:
+standard_user,secret_sauce,valid
+error_user,secret_sauce,error
+egrregreg,regergre,invalid
+locked_out_user,secret_sauce,locked
+problem_user,secret_sauce,problem
+performance_glitch_user,secret_sauce,performance
+visual_user,secret_sauce,visual
