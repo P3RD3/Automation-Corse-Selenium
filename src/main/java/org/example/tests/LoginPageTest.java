@@ -1,6 +1,6 @@
-package org.example;
+package org.example.tests;
 
-import org.example.LoginPage;
+import org.example.poms.LoginPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;

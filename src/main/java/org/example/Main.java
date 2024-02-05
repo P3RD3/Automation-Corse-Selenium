@@ -1,8 +1,10 @@
 package org.example;
 
+import org.example.tests.InvetoryPageTest;
+
 public class Main {
 
     public static void main(String[] args) {
-        InventoryPage.TestInventoryPage();
+        InvetoryPageTest.TestAddItemsToCart();
     }
 }

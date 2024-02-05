@@ -1,21 +1,14 @@
-package org.example;
+package org.example.poms;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.sql.Driver;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
-import static org.example.LoginPage.driver;
+
+import static org.example.poms.LoginPage.driver;
 
 public class InventoryPage {
     private LoginPage loginPage;
@@ -120,18 +113,9 @@ public class InventoryPage {
        backToProductsButton.click();
     }
 
-    public static void TestInventoryPage(){
-        LoginPage loginPage = new LoginPage();
-
-        loginPage.login("standard_user","secret_sauce");
-
-        addBackpackToCart();
-
-        System.out.println(getShoppingCartSize());
-        System.out.println(verifyBackpackImage());
-        System.out.println(verifyItemUniquePage("3"));
-
-
+    protected static void goToCart(){
+        WebElement cartButton = driver.findElement(By.id("shopping_cart_container"));
+        cartButton.click();
     }
 
 }
