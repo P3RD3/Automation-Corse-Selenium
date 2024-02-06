@@ -1,5 +1,9 @@
+browser:edge
 wait:5
-
+TestURL:https://www.saucedemo.com/
+firstName:Alex
+lastName:Boev
+postCode:1680
 Users:
 standard_user,secret_sauce,valid
 error_user,secret_sauce,error

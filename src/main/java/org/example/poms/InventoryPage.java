@@ -12,62 +12,84 @@ import static org.example.poms.LoginPage.driver;
 
 public class InventoryPage {
     private LoginPage loginPage;
-    protected static void addBackpackToCart(){
+
+    public InventoryPage() {
+    }
+    public static void addBackpackToCart(){
         WebElement addToCartButton = driver.findElement(By.id("add-to-cart-sauce-labs-backpack"));
         addToCartButton.click();
     }
-    protected static void addBoltTshirtToCart (){
+    public static void addBoltTshirtToCart (){
 
         WebElement addToCartButton = driver.findElement(By.id("add-to-cart-sauce-labs-bolt-t-shirt"));
         addToCartButton.click();
     }
-    protected static void addBikeLightToCart (){
+    public static void addBikeLightToCart (){
 
         WebElement addToCartButton = driver.findElement(By.id("add-to-cart-sauce-labs-bike-light"));
         addToCartButton.click();
     }
-    protected static void addFleeceJacketToCart (){
+    public static void addFleeceJacketToCart (){
 
         WebElement addToCartButton = driver.findElement(By.id("add-to-cart-sauce-labs-fleece-jacket"));
         addToCartButton.click();
     }
-    protected static void addOnesieToCart (){
+    public static void addOnesieToCart (){
 
         WebElement addToCartButton = driver.findElement(By.id("add-to-cart-sauce-labs-onesie"));
         addToCartButton.click();
     }
-    protected static void addAllTheThingsTshirtToCart (){
+    public static void addAllTheThingsTshirtToCart (){
 
         WebElement addToCartButton = driver.findElement(By.id("add-to-cart-test.allthethings()-t-shirt-(red)"));
         addToCartButton.click();
     }
 
-    protected static int getShoppingCartSize(){
+    public static int getShoppingCartSize(){
 
         WebElement shoppingCartBadge = driver.findElement(By.className("shopping_cart_badge"));
         String cartItemCountText = shoppingCartBadge.getText();
 
         return Integer.parseInt(cartItemCountText);
     }
-    protected static boolean verifyBackpackImage() {
+
+    public static boolean verifyBackpackImage() {
+        LoginPage loginPage = new LoginPage();
+        loginPage.login("standard_user","secret_sauce");
         return verifyItemImageSource("4", "/static/media/sauce-backpack-1200x1500.0a0b85a3.jpg");
     }
-    protected static boolean verifyBoltTshirtImage() {
+
+    public static boolean verifyBoltTshirtImage() {
+        LoginPage loginPage = new LoginPage();
+        loginPage.login("standard_user","secret_sauce");
         return verifyItemImageSource("1", "/static/media/bolt-shirt-1200x1500.c2599ac5.jpg");
     }
-    protected static boolean verifyBikeLightImage() {
+
+    public static boolean verifyBikeLightImage() {
+        LoginPage loginPage = new LoginPage();
+        loginPage.login("standard_user","secret_sauce");
         return verifyItemImageSource("0", "/static/media/bike-light-1200x1500.37c843b0.jpg");
     }
-    protected static boolean verifyFleeceJacketImage() {
+
+    public static boolean verifyFleeceJacketImage() {
+        LoginPage loginPage = new LoginPage();
+        loginPage.login("standard_user","secret_sauce");
         return verifyItemImageSource("5", "/static/media/sauce-pullover-1200x1500.51d7ffaf.jpg");
     }
-    protected static boolean verifyOnesieImage() {
+
+    public static boolean verifyOnesieImage() {
+        LoginPage loginPage = new LoginPage();
+        loginPage.login("standard_user","secret_sauce");
         return verifyItemImageSource("2", "/static/media/red-tatt-1200x1500.30dadef4.jpg");
     }
-    protected static boolean verifyAllTheThingsTshirtImage() {
+
+    public static boolean verifyAllTheThingsTshirtImage() {
+        LoginPage loginPage = new LoginPage();
+        loginPage.login("standard_user","secret_sauce");
         return verifyItemImageSource("3", "/static/media/red-onesie-1200x1500.2ec615b2.jpg");
     }
-    private static boolean verifyItemImageSource(String itemId, String expectedImageSource) {
+
+    public static boolean verifyItemImageSource(String itemId, String expectedImageSource) {
         String itemImageLinkId = "item_" + itemId + "_img_link";
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         WebElement itemImageLink = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id(itemImageLinkId)));
@@ -81,39 +103,14 @@ public class InventoryPage {
         }
     }
 
-    protected static boolean verifyItemUniquePage(String itemId) {
-        String titleButtonId = "item_" + itemId + "_img_link";
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-        WebElement titleButton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id(titleButtonId)));
 
-        if (titleButton != null) {
-            // Get the current URL before clicking
-            String currentUrlBeforeClick = driver.getCurrentUrl();
-
-            // Click on the title button
-            titleButton.click();
-
-            // Wait for the new URL to load
-            wait.until(ExpectedConditions.urlContains("inventory-item.html?id=" + itemId));
-
-            // Get the current URL after clicking
-            String currentUrlAfterClick = driver.getCurrentUrl();
-
-            backToProducts();
-            // Verify that the current URL contains the expected item URL
-            return currentUrlAfterClick.contains("inventory-item.html?id=" + itemId);
-        } else {
-            return false; // Element not found, verification fails
-        }
-    }
-
-    protected static void backToProducts(){
+    public static void backToProducts(){
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         WebElement backToProductsButton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("back-to-products")));
        backToProductsButton.click();
     }
 
-    protected static void goToCart(){
+    public static void goToCart(){
         WebElement cartButton = driver.findElement(By.id("shopping_cart_container"));
         cartButton.click();
     }

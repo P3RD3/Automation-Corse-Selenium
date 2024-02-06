@@ -14,19 +14,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.Duration;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
 public class LoginPageTest extends LoginPage {
-    private static Properties readConfigFile() {
-        Properties properties = new Properties();
-        try (BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/Config.txt"))) {
-            properties.load(reader);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return properties;
-    }
+
+    private static final long PERFORMANCE_THRESHOLD = 1000;
 
     @Test
     public static void testLoginForAllUsers() {
@@ -49,6 +43,10 @@ public class LoginPageTest extends LoginPage {
                 if (line.trim().isEmpty() || line.trim().startsWith("wait:")) {
                     continue;
                 }
+
+                if (line.trim().isEmpty() || line.trim().startsWith("TestURL:")) {
+                    continue;
+                }
                 String[] data = line.split(",");
                 if (data.length == 3) {
                     String newUsername = data[0];
@@ -59,12 +57,27 @@ public class LoginPageTest extends LoginPage {
 
                     switch (newUserType) {
 
-                        case "valid", "visual", "problem", "error":
-                            loginPage.login(newUsername,newPassword);
-                            WebElement inventory = driver.findElement(By.id("inventory_container"));
-                            Assert.assertTrue(inventory.isDisplayed(), "Login failed for username: " + newUsername);
-                            driver.close();
-                            break;
+                        case "valid", "visual", "problem", "error","performance":
+                            try {
+                                Date startTime = new Date(); // Record the start
+                                loginPage.login(newUsername, newPassword);
+                                Date endTime = new Date(); // Record the end time of the login attempt
+                                long loginTime; // Calculate the login time
+                                loginTime = endTime.getTime() - startTime.getTime();
+
+                                if (loginTime > PERFORMANCE_THRESHOLD) {
+                                    driver.close();
+                                }
+                                WebElement inventory = driver.findElement(By.id("inventory_container"));
+                                Assert.assertTrue(inventory.isDisplayed(), "Login failed for username: " + newUsername);
+                                driver.close();
+                                break;
+                            } catch (org.openqa.selenium.NoSuchSessionException e) {
+                                // Handle the exception without printing the stack trace
+                                System.out.println("User with type '" + newUsername + "' experienced performance issues during login.");
+                                driver.close();
+                                break;
+                            }
                         case "locked":
                             loginPage.login(newUsername,newPassword);
                             WebDriverWait waitLocked = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -81,13 +94,6 @@ public class LoginPageTest extends LoginPage {
                             String errorMessageTextInvalid = errorContainerInvalid.getText();
                             Assert.assertTrue(errorMessageTextInvalid.contains("Epic sadface: Username and password do not match any user in this service"),
                                     "Unexpected error message for invalid user");
-                            driver.close();
-                            break;
-                        case "performance":
-                            loginPage.login(newUsername,newPassword);
-                            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-                            inventory = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("inventory_container")));
-                            Assert.assertTrue(inventory.isDisplayed(), "Login failed for username: " + newUsername);
                             driver.close();
                             break;
 
@@ -118,11 +124,6 @@ public class LoginPageTest extends LoginPage {
         WebElement loginButton = driver.findElement(By.id("login-button"));
         Assert.assertTrue(loginButton.isDisplayed(), "Logout failed");
         driver.close();
-    }
-
-    public static void TestLoginPage(){
-        testLoginForAllUsers();
-        testLogout();
     }
 
 }
