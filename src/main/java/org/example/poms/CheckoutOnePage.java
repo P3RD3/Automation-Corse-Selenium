@@ -21,6 +21,8 @@ public class CheckoutOnePage {
         }
         return properties;
     }
+
+    // Read order details from reader to fill checkout survey
     public static void fillCheckoutData(){
 
         Properties configProperties = readConfigFile();

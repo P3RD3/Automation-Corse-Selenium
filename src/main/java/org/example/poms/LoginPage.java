@@ -18,6 +18,8 @@ import java.util.Properties;
 public class LoginPage {
     public static WebDriver driver;
 
+
+    //Since all tests will require us to login, the initialization of the webdriver is stored in the LoginPage constructor
     public LoginPage() {
         Properties configProperties = readConfigFile();
 
@@ -34,10 +36,12 @@ public class LoginPage {
                 driver = new EdgeDriver();
                 break;
             default:
+                // in case someone enters anything unexpected
                 throw new IllegalArgumentException("Unsupported browser: " + browser);
         }
     }
 
+    //We use this to read the data from the Config.txt to configure the tests
     protected static Properties readConfigFile() {
         Properties properties = new Properties();
         try (BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/Config.txt"))) {
@@ -48,7 +52,9 @@ public class LoginPage {
         return properties;
     }
 
-    public void login(String username, String password) {
+    //A basic login function, takes a username and password, the URL it will log-into is taken from Config file
+    //Function is static so it can be called by sub-classes without the requirement of a present object
+    public static void login(String username, String password) {
         Properties configProperties = readConfigFile();
         String pageUrl = configProperties.getProperty("TestURL");
 
@@ -63,11 +69,15 @@ public class LoginPage {
         loginButton.click();
     }
 
-    public void logout() {
+// A function to test the logout functionality
+    public static void logout() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         WebElement burgerMenu = driver.findElement(By.id("react-burger-menu-btn"));
         burgerMenu.click();
-        WebElement logoutButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("logout_sidebar_link")));
+        Properties configProperties = readConfigFile();
+        String implicitWaitValue = configProperties.getProperty("wait");
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(Integer.parseInt(implicitWaitValue)));
+        WebElement logoutButton = driver.findElement(By.id("logout_sidebar_link"));
         logoutButton.click();
     }
 }

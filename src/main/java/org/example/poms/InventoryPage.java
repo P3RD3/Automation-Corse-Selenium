@@ -11,10 +11,15 @@ import java.time.Duration;
 import static org.example.poms.LoginPage.driver;
 
 public class InventoryPage {
+
+    //Create object of LoginPage to user methods needed from there(Login)
     private LoginPage loginPage;
 
+    //Constructor to call this page if we need it and get access to its methods
     public InventoryPage() {
     }
+
+    //Basic add item methods
     public static void addBackpackToCart(){
         WebElement addToCartButton = driver.findElement(By.id("add-to-cart-sauce-labs-backpack"));
         addToCartButton.click();
@@ -45,6 +50,7 @@ public class InventoryPage {
         addToCartButton.click();
     }
 
+    //Methods to get the amount of items in cart(badge in the top right)
     public static int getShoppingCartSize(){
 
         WebElement shoppingCartBadge = driver.findElement(By.className("shopping_cart_badge"));
@@ -53,6 +59,7 @@ public class InventoryPage {
         return Integer.parseInt(cartItemCountText);
     }
 
+    //Booleans that check if the Item images are the same
     public static boolean verifyBackpackImage() {
         LoginPage loginPage = new LoginPage();
         loginPage.login("standard_user","secret_sauce");
@@ -89,6 +96,7 @@ public class InventoryPage {
         return verifyItemImageSource("3", "/static/media/red-onesie-1200x1500.2ec615b2.jpg");
     }
 
+    //This finds the current image and checks it with the original
     public static boolean verifyItemImageSource(String itemId, String expectedImageSource) {
         String itemImageLinkId = "item_" + itemId + "_img_link";
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
@@ -103,7 +111,7 @@ public class InventoryPage {
         }
     }
 
-
+//Methods to user the navigation buttons
     public static void backToProducts(){
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         WebElement backToProductsButton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("back-to-products")));

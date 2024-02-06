@@ -15,6 +15,7 @@ import static org.example.poms.LoginPage.driver;
 
 public class InvetoryPageTest extends InventoryPage {
 
+    //Check all images are correct
     @Test
     public static void verifyInventoryImages()
     {
@@ -36,41 +37,38 @@ public class InvetoryPageTest extends InventoryPage {
         // Assert that at least one of the verification methods returned false
         Assert.assertTrue(!backpackImageVerified || !onesieImageVerified || !allTheThingsTshirtImageVerified || !bikeLightImageVerified || !fleeceJacketImageVerified || !boltTshirtImageVerified,"At least one image verification failed");
     }
+
+    // A test to verify that each item has its only Description page
 @Test
-    public static boolean verifyItemUniquePage(String itemId) {
+    public static void verifyItemUniquePage() {
     LoginPage loginPage = new LoginPage();
-    loginPage.login("standard_user","secret_sauce");
+    loginPage.login("standard_user", "secret_sauce");
 
-        String titleButtonId = "item_" + itemId + "_img_link";
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-        WebElement titleButton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id(titleButtonId)));
+    int itemId = 3;
+    String expectedURL = "https://www.saucedemo.com/inventory-item.html?id=3";
+    String titleButtonId = "item_" + itemId + "_img_link";
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+    WebElement titleButton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id(titleButtonId)));
 
-        if (titleButton != null) {
-            // Get the current URL before clicking
-            String currentUrlBeforeClick = driver.getCurrentUrl();
+        // Click on the title button
+        titleButton.click();
 
-            // Click on the title button
-            titleButton.click();
+        // Wait for the new URL to load
+        wait.until(ExpectedConditions.urlContains("inventory-item.html?id=" + itemId));
 
-            // Wait for the new URL to load
-            wait.until(ExpectedConditions.urlContains("inventory-item.html?id=" + itemId));
+        // Get the current URL after clicking
+        String currentUrlAfterClick = driver.getCurrentUrl();
 
-            // Get the current URL after clicking
-            String currentUrlAfterClick = driver.getCurrentUrl();
+        backToProducts();
+        // Verify that the current URL matches the expected URL
+        LoginPage.driver.close();
+        Assert.assertEquals(currentUrlAfterClick,expectedURL);
+}
 
-            backToProducts();
-            // Verify that the current URL contains the expected item URL
-            LoginPage.driver.close();
-            return currentUrlAfterClick.contains("inventory-item.html?id=" + itemId);
-        } else {
-            LoginPage.driver.close();
-            return false; // Element not found, verification fails
-
-        }
-    }
-
+    //Testing if items can be added to cart
 @Test
     public static void TestAddItemsToCart(){
+        //For this test we will add 2 items
         int expected_count = 2;
         LoginPage loginPage = new LoginPage();
         loginPage.login("standard_user","secret_sauce");

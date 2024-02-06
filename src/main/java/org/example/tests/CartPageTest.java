@@ -34,8 +34,6 @@ public class CartPageTest extends CartPage {
         inventoryPage.addBackpackToCart();
         inventoryPage.goToCart();
 
-        List<String> itemTitlesBeforeRemoval = getItemTitles();
-
         // Remove the backpack from the shopping cart
         removeBackpack();
 
