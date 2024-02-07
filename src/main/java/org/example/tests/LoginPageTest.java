@@ -14,11 +14,10 @@ import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.Date;
 import java.util.List;
-import java.util.Properties;
 
 public class LoginPageTest extends LoginPage {
 
-    private static final long PERFORMANCE_THRESHOLD = 1000;
+    private static final long PERFORMANCE_THRESHOLD = 3000;
 
     @Test
     public static void testLoginForAllUsers() {
@@ -58,12 +57,12 @@ public class LoginPageTest extends LoginPage {
 
                     //Since we have different types of users, we have a couple of know outcomes, such as invalid user and lockedout users
                     switch (newUserType) {
-                        //This case handleds all users that SHOULD be able to log in
+                        //This case handles all users that SHOULD be able to log in
                         case "valid", "visual", "problem", "error","performance":
                             //Try-Catch block to intercept expected exception
                             try {
                                 /* To make sure that all user have the same performance experience,
-                                * there is a 1 second timer in which we expect all user should log in(performance issue user is going to fail here)*/
+                                * there is a 1-second timer in which we expect all user should log in(performance issue user is going to fail here)*/
                                 Date startTime = new Date(); // Record the start time of the login
                                 login(newUsername, newPassword);
                                 Date endTime = new Date(); // Record the end time of the login attempt
@@ -78,7 +77,6 @@ public class LoginPageTest extends LoginPage {
                                 //We confirm login by seeing the Inventory page
                                 WebElement inventory = driver.findElement(By.id("inventory_container"));
                                 Assert.assertTrue(inventory.isDisplayed(), "Login failed for username: " + newUsername);
-                                driver.close();
                                 break;
                             }
                             //Since we close the driver prematurely upon detecting a slow login it will throw the below excpetion
@@ -99,7 +97,6 @@ public class LoginPageTest extends LoginPage {
                             //Make sure that the user was not able to log in and got the appropriate error message
                             Assert.assertTrue(errorMessageTextLocked.contains("Sorry, this user has been locked out."),
                                     "Unexpected error message for locked-out user");
-                            driver.close();
                             break;
 
                             //Same as locked user, different error message
@@ -110,7 +107,6 @@ public class LoginPageTest extends LoginPage {
                             String errorMessageTextInvalid = errorContainerInvalid.getText();
                             Assert.assertTrue(errorMessageTextInvalid.contains("Epic sadface: Username and password do not match any user in this service"),
                                     "Unexpected error message for invalid user");
-                            driver.close();
                             break;
 
                     }

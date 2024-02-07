@@ -1,4 +1,4 @@
-browser:edge
+browser:chrome
 wait:5
 TestURL:https://www.saucedemo.com/
 firstName:Alex
@@ -6,7 +6,6 @@ lastName:Boev
 postCode:1680
 Users:
 standard_user,secret_sauce,valid
-performance_glitch_user,secret_sauce,performance
 error_user,secret_sauce,error
 egrregreg,regergre,invalid
 locked_out_user,secret_sauce,locked

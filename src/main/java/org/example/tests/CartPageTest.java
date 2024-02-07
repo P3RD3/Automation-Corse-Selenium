@@ -13,8 +13,6 @@ import java.util.List;
 
 import static org.example.poms.LoginPage.driver;
 import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
-
 public class CartPageTest extends CartPage {
 
     private static List<String> getItemTitles() {
